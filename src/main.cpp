@@ -9,8 +9,8 @@
 #include "esp_http_server.h"
 
 // Replace with your network credentials
-const char *ssid = "CLARO_2G9CDF60";
-const char *password = "C39CDF60";
+const char *ssid = "Digitalli";
+const char *password = "123quatro";
 
 #define PART_BOUNDARY "123456789000000000000987654321"
 
@@ -185,6 +185,36 @@ static const char PROGMEM INDEX_HTML[] = R"rawliteral(
       <tr><td colspan="3" align="center"><button class="button" onmousedown="toggleCheckbox('light');" ontouchstart="toggleCheckbox('light');">Light</button></td></tr>                   
     </table>
    <script>
+   document.body.addEventListener('keydown', function (event) {
+        const key = event.key;
+        const code = event.keyCode;
+        console.log(code);
+        if(code == 32) {
+          toggleCheckbox('light');
+         } else if(code == 37) {
+          // seta pra ESQUERDA
+          toggleCheckbox('left');          
+         } else if(code == 38) {
+          // seta pra CIMA
+          toggleCheckbox('forward');
+
+         } else if(code == 39) {
+          // seta pra DIREITA
+          toggleCheckbox('right');
+
+         } else if(code == 40) {
+          // seta pra BAIXO
+          toggleCheckbox('backward');
+
+         }
+        
+    });
+
+   document.body.addEventListener('keyup', function (event) {
+      toggleCheckbox('stop')
+
+   });
+
    function toggleCheckbox(x) {
      var xhr = new XMLHttpRequest();
      xhr.open("GET", "/action?go=" + x, true);
@@ -325,7 +355,7 @@ static esp_err_t cmd_handler(httpd_req_t *req)
     sensor_t *s = esp_camera_sensor_get();
     int res = 0;
 
-    if (!strcmp(variable, "forward"))
+    if (!strcmp(variable, "backward"))
     {
         Serial.println("Forward");
 
@@ -350,7 +380,7 @@ static esp_err_t cmd_handler(httpd_req_t *req)
         ledcWrite(CH_MOTOR_2_PIN_1, 0);
         ledcWrite(CH_MOTOR_2_PIN_2, DUTY);
     }
-    else if (!strcmp(variable, "backward"))
+    else if (!strcmp(variable, "forward"))
     {
         Serial.println("Backward");
         ledcWrite(CH_MOTOR_1_PIN_1, 0);
